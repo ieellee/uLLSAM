@@ -199,7 +199,6 @@ def process_uploaded_image(image_data):
         
         img_array = cv2.resize(img_array, (1024, 1024), interpolation=cv2.INTER_LINEAR)
         
-        # 5. 转换为PIL图像
         img_pil = Image.fromarray(img_array)
         
         print(f"Image processing completed: final size={img_pil.size}, padding info={padding_info}")
@@ -211,49 +210,35 @@ def process_uploaded_image(image_data):
         print(error_msg)
         return None
 
-# 预处理图像
 def preprocess_image(image_pil, img_size=1024):
     """Preprocess image for model input, exactly following the method in eval_uLLSAM_seg.py"""
     global original_image_size
     original_image_size = image_pil.size  # Save original size
     
-    # 检查图像模式并进行适当的处理
     if image_pil.mode in ["L", "I", "F", "I;16", "I;16L", "I;16B", "RGBA"]:
         print(f"Converting special mode image ({image_pil.mode}) to RGB")
         
-        # 提取图像数组
         image_array = np.array(image_pil)
         
-        # 对于不同类型的图像进行特殊处理
         if image_pil.mode == "RGBA":
-            # 对于RGBA，去除alpha通道
             image_array = image_array[:, :, :3]
         elif len(image_array.shape) == 2:
-            # 对于单通道图像，归一化到0-255范围
             if image_array.dtype != np.uint8:
                 image_array = ((image_array - image_array.min()) / 
                               (image_array.max() - image_array.min() + 1e-8) * 255).astype(np.uint8)
         
-        # 转换为RGB格式的PIL图像
         image_pil = Image.fromarray(image_array).convert("RGB")
     
-    # 将图像padding成正方形（保持宽高比）
     w, h = image_pil.size
     if w != h:
-        # 计算最大边长
         max_side = max(w, h)
-        # 创建新的正方形图像（黑色背景）
         square_img = Image.new('RGB', (max_side, max_side), (0, 0, 0))
-        # 计算粘贴位置（居中）
         paste_x = (max_side - w) // 2
         paste_y = (max_side - h) // 2
-        # 粘贴原图到正方形图像上
         square_img.paste(image_pil, (paste_x, paste_y))
-        # 更新图像为padding后的正方形图像
         image_pil = square_img
         print(f"Padding image to square: original size={w}x{h}, new size={max_side}x{max_side}")
     
-    # 使用与eval_uLLSAM_seg.py相同的变换
     transform = transforms.Compose([
         transforms.Resize((img_size, img_size)),
         transforms.ToTensor(),
@@ -261,7 +246,7 @@ def preprocess_image(image_pil, img_size=1024):
     ])
     
     image_tensor = transform(image_pil)
-    return image_tensor.unsqueeze(0)  # 添加批次维度
+    return image_tensor.unsqueeze(0)  
 
 
 def update_image_with_points(image, points, labels):
@@ -295,14 +280,13 @@ def update_image_with_points(image, points, labels):
     
     return img_pil
 
-# 逆预处理，将掩码恢复到原始图像大小
 def postprocess_mask(mask, original_size):
     """Restore mask to original image size"""
     mask_image = Image.fromarray(mask.astype(np.uint8))
     mask_image = mask_image.resize(original_size, Image.NEAREST)
     return np.array(mask_image)
 
-# 加载模型
+
 def load_model(model_name, device_choice, dtype_choice):
     """Load model and return status information"""
     global model, tokenizer, ctx, args
@@ -319,11 +303,7 @@ def load_model(model_name, device_choice, dtype_choice):
     print("Using device = ", args.device)
     # Set model weight paths
     model_paths = {
-        "uLLSAM-B-ALL-epoch24": "/home/user9/project/checkpoints/custom/uLLSAM/checkpoints/final_all_e24.pt",
-        "uLLSAM-B-EM-epoch12": "/home/user9/project/checkpoints/custom/uLLSAM/checkpoints/final_em_e12_baseline.pt",
-        "uLLSAM-V1-EM-epoch12": "/home/user9/project/checkpoints/custom/uLLSAM/checkpoints/final_em_e12_v1.pt",
-        "uLLSAM-B-LM-epoch12": "/home/user9/project/checkpoints/custom/uLLSAM/checkpoints/final_lm_e12_baseline.pt",
-        "uLLSAM-V1-LM-epoch12": "/home/user9/project/checkpoints/custom/uLLSAM/checkpoints/final_lm_e12_v1.pt"
+        "uLLSAM-B-ALL-epoch24": "./checkpoints/final_all_e24.pt",
     }
     
     if model_name in model_paths:
@@ -448,7 +428,6 @@ def prepare_image_and_prompt(image, prompt_text, tokenizer, device, dtype="bfloa
         "image_pil": image_pil  # Return original PIL image for further processing
     }
 
-# 生成图像描述
 def generate_caption(image, prompt=""):
     """Generate text description based on image, following exactly the method in eval_language.py"""
     global model, tokenizer, ctx, args
@@ -515,7 +494,6 @@ def generate_caption(image, prompt=""):
         error_msg = f"Error generating description: {str(e)}\n{traceback.format_exc()}"
         return error_msg
 
-# 处理点击事件并生成掩码
 def process_points_and_generate_mask(image, points, point_labels, image_display, final_mask_state=None):
     """Process user-clicked points and generate segmentation mask"""
     global model, tokenizer, ctx, args, original_image_size, current_mask
@@ -906,9 +884,7 @@ def reset_instances(orig_img):
 def create_ui():
     with gr.Blocks(title="uLLSAM Interactive Segmentation", theme=gr.themes.Soft(), analytics_enabled=False) as demo:
         # Set to English through environment variable
-        gr.Markdown("# 🔬 uLLSAM Interactive Segmentation 🔬")
-        # gr.Markdown("使用uLLSAM进行基于交互的图像分割和生成描述")
-        
+        gr.Markdown("# 🔬 uLLSAM Interactive Segmentation 🔬")        
         # Main image display area - left-right layout
         with gr.Row():
             # Left image input area (occupies 45% space, leave 5% as white space)
