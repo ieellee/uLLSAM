@@ -27,3 +27,10 @@ bash ./scripts/train_all_joint_v2.sh
 If you want to finetune your custom data, follow the data structure in ./data/train_seg_all.jsonl
 
 Specifically, each line in jsonl is structured as {"image_path": "...", "conversation": \[{"role": "user", "content": "Describe the image in detail\n<image>"}, {"role": "assistant", "content": ""}\]}
+## 5. Acknowledgement
+Our uLLSAM is heavily inspired by many outstanding prior works, including
+[SAM](https://github.com/facebookresearch/segment-anything)
+[torch_em](https://github.com/constantinpape/torch-em)
+[Micro-SAM](https://github.com/computational-cell-analytics/micro-sam/tree/master)
+[InternVL](https://github.com/OpenGVLab/InternVL/tree/main)
+Thank the authors of above projects for open-sourcing their assets!
