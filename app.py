@@ -15,7 +15,7 @@ import tifffile
 import colorsys
 
 
-from train_joint_v1 import (
+from train_joint_v2 import (
     CalcIoU, 
     DiceLoss, 
     BCELoss,
