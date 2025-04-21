@@ -31,7 +31,7 @@ from modeling.conversation import get_conv_template
 os.environ["GRADIO_TEMP_DIR"] = "./temp_gradio"
 os.makedirs("./temp_gradio", exist_ok=True)
 
-# 替代argparse的配置类
+
 class Args:
     def __init__(self):
         self.pretrained_path = "/home/user9/project/checkpoints/InternVL2_5-2B"
