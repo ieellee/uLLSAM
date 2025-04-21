@@ -16,6 +16,7 @@ Please follow [README.md](./checkpoints/README.md) in checkpoints folder.
 python app.py
 ```
 You can visit the application at localhost:9996 in your browser, chrome is recommended。
+![demo](./figs/demo.gif)
 ## 4. Train and Finetune uLLSAM
 If you want to reproduce uLLSAM, just use the ./data/train_seg_all.jsonl to train the model, you need to prepare 9 datasets.
 
