@@ -34,7 +34,7 @@ os.makedirs("./temp_gradio", exist_ok=True)
 
 class Args:
     def __init__(self):
-        self.pretrained_path = "/home/user9/project/checkpoints/InternVL2_5-2B"
+        self.pretrained_path = "./checkpoints/InternVL2_5-2B"
         self.weights_path = None
         self.device = "cuda:7" if torch.cuda.is_available() else "cpu"
         self.dtype = "bfloat16"
