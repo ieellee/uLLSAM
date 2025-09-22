@@ -1,6 +1,11 @@
 # uLLSAM
 Official Implement of uLLSAM
 
+
+# News 🚀🚀🚀
+
+`2025/04/21`: First version of uLLSAM has been released, we also make model weights available in [README.md](./checkpoints/README.md). Currently we support InternLM-1.8B
+
 ## 1. Installation guaidance
 ```bash
 # clone the repository to your disk
