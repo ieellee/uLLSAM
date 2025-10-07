@@ -1850,24 +1850,3 @@ if __name__ == "__main__":
     main()
 
 
-
-'''
-python train_joint.py --epochs 24 --max_length 1280 --learning_rate 0.02 --use_wandb --log_interval 100
-CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --nproc_per_node=4 train_joint.py --epochs 24 --max_length 1280
-
-CUDA_VISIBLE_DEVICES=2 python train_joint.py --epochs 24 --max_length 1280 --learning_rate 0.01 --log_interval 100 --batch_size 2
-
-TODO 
-1. 增强mlp2的泛化能力
-2. 探索直接用hidden state 替代 image encoder
-3. 探索mask decoder中和hidden state进行交互
-
-
-NOTE
-我现在明白了，sam的batch训练是对point instance进行batch，而不是对image进行batch。应该是这样的
-所以目前是将point bs设置为4
-
-
-python train_joint_v1.py --epochs 12 --max_length 1280 --learning_rate 0.001 --log_interval 100
-
-'''
