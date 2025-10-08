@@ -1575,7 +1575,6 @@ def main():
     # python train.py --training_mode sft --checkpoint_path ./checkpoints/checkpoint_epoch6_step6693.pt --batch_size 1 --learning_rate 1e-5 --max_length 1280 --images_root "" --data_path "/home/user9/project/Micro-LLMSAMv2/data/platynereis/train_captions_v2.jsonl" --freeze_vision
 
     parser.add_argument("--training_mode", type=str, choices=["pretrain", "sft", "segment"], default="segment", help="Training mode: pretrain, sft or segment")
-    parser.add_argument("--training_mode", type=str, choices=["pretrain", "sft", "segment"], default="segment", help="训练模式: pretrain, sft或segment")
     parser.add_argument("--checkpoint_path", type=str, default="/home/user9/project/checkpoints/custom/checkpoints/checkpoint_epoch6_step6693.pt", help="在SFT模式下，从此checkpoint加载模型权重")
     
     parser.add_argument("--epochs", type=int, default=6, help="训练轮数")
