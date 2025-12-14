@@ -3,7 +3,8 @@ Official Implement of uLLSAM, our paper is available at https://arxiv.org/abs/25
 
 # News 🚀🚀🚀
 
-`2025/04/21`: First version of uLLSAM has been released, we also make model weights available in [README.md](./checkpoints/README.md). Currently we support InternLM-1.8B
+`2025/04/21`: First version of uLLSAM has been released, we also make model weights available in [README.md](./checkpoints/README.md). Currently we support InternLM-1.8B.
+
 `2025/12/15`: We now support Qwen3-2B as LLM.
 
 ## 1. Installation guaidance
